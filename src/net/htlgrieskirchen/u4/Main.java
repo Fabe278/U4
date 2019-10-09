@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -32,7 +34,14 @@ public class Main {
         int divider = s.nextInt();
         int lengthList = zahlenarr.size()/chunks;
         
-////        for(int i)
+        ExecutorService exec = Executors.newFixedThreadPool(chunks);
+        
+        int zahl = 0;
+        for(int i = 0; i < chunks; i++){
+            Runnable worker = new Worker(zahl,zahl + lengthList, divider, zahlenarr);
+            exec.execute(worker);
+            zahl = zahl + lengthList;
+        }
     }
     
     public List<Integer> readCSVFile(String path){
